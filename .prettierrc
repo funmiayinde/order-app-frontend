@@ -1,0 +1,18 @@
+{
+  "bracketSpacing": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "useTabs": false,
+  "max_line_length": 80,
+  "semi": true,
+  "flatTernaryExpressions": true,
+  "brace-style": [
+    "error",
+    "stroustrup",
+    {
+      "allowSingleLine": false
+    }
+  ],
+  "arrowParens": "avoid"
+}
