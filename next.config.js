@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
-  publicRuntimeConfig: {
+  env: {
     PORT: process.env.PORT,
     NEXT_PUBLIC_LANG: process.env.NEXT_PUBLIC_LANG,
     NEXT_PUBLIC_NAME: process.env.NEXT_PUBLIC_NAME,
@@ -12,7 +11,7 @@ const nextConfig = {
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
     NEXT_PUBLIC_FIREBASE_DATABASE_URL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
     NEXT_PUBLIC_FIREBASE_PROJECT_ID: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  }
+  },
 }
 
 module.exports = nextConfig
