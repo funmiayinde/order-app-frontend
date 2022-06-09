@@ -27,9 +27,9 @@ yarn-error.log*
 
 # local env files
 .DS_Store
-.env
+# .env
 .env.local
-.env.production
+# .env.production
 
 
 # vercel
