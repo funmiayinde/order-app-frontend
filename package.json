@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "env-cmd -f .env yarn build && next start -p $PORT",
+    "start": "next start -p $PORT",
     "heroku:deploy": "git push heroku -f develop:main",
     "lint": "next lint"
   },
