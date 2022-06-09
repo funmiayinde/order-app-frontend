@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
+import { Avatar, Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { ChartPie as CharBarIcon } from '../../../_shared/icons/chart-pie';
@@ -27,7 +27,7 @@ const getSections = (): sectionItemType[] => [
     items: [
       {
         title: 'Order',
-        path: '/app/order',
+        path: '/app/orders',
         icon: <CharBarIcon fontSize="small" />,
       },
     ],
@@ -89,9 +89,9 @@ export const Sidebar = ({ onClose, open, authUser }: SidebarProps) => {
         >
           <div>
             <Box sx={{ p: 3 }}>
-              <NextLink href="/app/dashboard" passHref>
+              <NextLink href="/app/orders" passHref>
                 <a>
-                  <img alt="Logo" src="/static/images/avatar-image.png" />
+                  <Avatar alt="Logo"/>
                 </a>
               </NextLink>
             </Box>

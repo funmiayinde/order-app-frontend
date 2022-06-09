@@ -6,7 +6,6 @@ export const APP  = {
 };
 
 export const API = {
-    LOGIN: '/auth/sign-in',
     USERS: '/users',
     ORDERS: '/orders',
 };

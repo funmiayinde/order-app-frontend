@@ -27,7 +27,7 @@ const LoginForm = (props: LoginFormProps) => {
       key: 'login',
       onFinish: (data: Record<string, any> | undefined) => {
         console.log('data-onFinish:::', data);
-        router.push(`${APP.DASHBOARD}`)
+        router.push(`${APP.ORDER}`)
       },
     });
   };

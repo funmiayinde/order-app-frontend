@@ -9,23 +9,21 @@ type AuthGuardsProps = {
 };
 
 export const GuestGuard = ({ children }: AuthGuardsProps) => {
-  const { sessionToken, authData } = useAuth({});
+  const { sessionToken } = useAuth({});
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
-
-  console.log('GuestGuard-sessionToken:::', sessionToken);
 
   useEffect(() => {
       if (!router.isReady) {
           return;
       }
       // Check if user is authenticated
-      if (!isEmpty(sessionToken) && !isEmpty(authData)) {
+      if (!isEmpty(sessionToken)) {
           router.push(APP.ORDER).catch(console.error);
       } else {
           setChecked(true);
       }
-  }, [router.isReady, sessionToken, authData, router]);
+  }, [router.isReady, sessionToken, router]);
 
   if (!checked) {
       return null;

@@ -17,7 +17,7 @@ import SignUpForm from '../../../components/auth/SignUpForm';
 
 const SignUp = () => {
   const SIGN_UP_UI_KEY = 'signUp';
-  const { handleLogin } = useAuth({ key: SIGN_UP_UI_KEY });
+  const { handleSignUp } = useAuth({ key: SIGN_UP_UI_KEY });
   const { uiErrors } = useUI();
 
   return (
@@ -52,7 +52,7 @@ const SignUp = () => {
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="h4">Log in</Typography>
+              <Typography variant="h4">Sign Up</Typography>
               <Typography color="textSecondary" sx={{ mt: 2 }} variant="body2">
                 Sign up to the internal platform
               </Typography>
@@ -68,7 +68,7 @@ const SignUp = () => {
               )}
               <p />
               <p />
-              <SignUpForm onSubmit={handleLogin} />
+              <SignUpForm onSubmit={handleSignUp} />
             </Box>
             <Divider sx={{ my: 3 }} />
             <Box sx={{ mt: 1 }}>

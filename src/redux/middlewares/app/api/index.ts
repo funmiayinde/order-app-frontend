@@ -22,6 +22,7 @@ import {
   createUserWithEmailAndPassword,
   UserCredential,
 } from 'firebase/auth';
+import { app } from '../../../../_shared/util/firebase';
 
 export const alertSuccess = (successMessage: string) => {
   toast.success(successMessage);
@@ -54,8 +55,11 @@ const processFirebaseResponse = (
   batch(() => {
     const { user } = response;
     if (response && response.user) {
-      console.log('token:', user.getIdToken());
-      dispatch(setSessionToken(user.getIdToken()));
+      console.log('token:::', user.getIdToken());
+      user.getIdToken().then((value) => {
+        console.log('user-token:::', value);
+        dispatch(setSessionToken(value));
+      });
     }
     if (onSuccess) {
       if (isFunction(onSuccess)) {
@@ -109,7 +113,7 @@ const processFirebaseErrorResponse = (
         message: 'Please check your internet connection.',
       };
       console.log('firebase-err:', err);
-      dispatch(updateUIError(key, errorMessage || err.message));
+      dispatch(updateUIError(key, err || err.message));
       showErrorMessage(errorMessage ?? err.message);
     }
     dispatch(stopUILoading(key));
@@ -121,7 +125,8 @@ export const firebaseRequest: Middleware<unknown, RootState> = ({
 }) => next => (action: Action) => {
   if (action.type === FIREBASE_REQUEST.START) {
     const { meta } = action;
-    const { key, payload } = meta;
+    const { key, payload } = meta; 
+    console.log('firebaseRequest-key:::', key);
     batch(() => {
       dispatch(updateUIError(key, null));
       dispatch(startUILoading(key));
@@ -135,7 +140,7 @@ export const firebaseRequest: Middleware<unknown, RootState> = ({
       },
     };
     firebaseFunc[key]
-      .func(getAuth(), get(payload, 'email'), get(payload, 'password'))
+      .func(getAuth(app), get(payload, 'email'), get(payload, 'password'))
       .then((response: UserCredential) => {
         processFirebaseResponse(dispatch, meta, response);
       })

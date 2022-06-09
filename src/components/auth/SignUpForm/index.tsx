@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import { useUI } from '../../../hooks/useUI';
 import { Box, FormHelperText, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useAuth } from '../../../hooks/useAuth';
 import { ActionOption } from '../../../redux/actions/type';
 import { useRouter } from 'next/router';
 import { APP } from '../../../_shared/util/_urls';
@@ -22,10 +21,10 @@ const SignUpForm = (props: SignUpFormProps) => {
 
   const onFinish = (values: Record<'email' & 'password', string>) => {
     onSubmit(values, {
-      key: 'login',
+      key: 'signUp',
       onFinish: (data: Record<string, any> | undefined) => {
         console.log('data-onFinish:::', data);
-        router.push(`${APP.DASHBOARD}`)
+        router.push(`${APP.ORDER}`)
       },
     });
   };
@@ -43,7 +42,7 @@ const SignUpForm = (props: SignUpFormProps) => {
         .max(255)
         .required('Email is required'),
       password: Yup.string().min(8).max(255).required('Password is required'),
-      confirm_password: Yup.string().min(8).max(255).required('Password is required'),
+      confirm_password: Yup.string().min(8).max(255).required('Confirm Password is required'),
     }),
     onSubmit: (values, helpers) => {
       try {
@@ -86,7 +85,7 @@ const SignUpForm = (props: SignUpFormProps) => {
         value={formik.values.password}
       />
       <TextField
-        name="password"
+        name="confirm_password"
         autoFocus
         error={Boolean(formik.touched.confirm_password && formik.errors.confirm_password)}
         fullWidth
@@ -112,7 +111,7 @@ const SignUpForm = (props: SignUpFormProps) => {
           variant="contained"
           loading={uiLoaders.signUp}
         >
-          Log In
+          Create Account
         </LoadingButton>
       </Box>
     </form>
