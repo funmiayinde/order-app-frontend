@@ -1,6 +1,11 @@
 import { Middleware } from 'redux';
 import { API } from '../../../../_shared/util/_urls';
-import {FIND_ORDERS, GET, httpRequest } from '../../../actions';
+import {
+  FIND_ORDERS,
+  GET,
+  httpRequest,
+  RESET_APP_STATE,
+} from '../../../actions';
 import { Action, RootState } from '../../../type';
 
 export const findOrders: Middleware<unknown, RootState> = ({ dispatch }) => (
@@ -18,6 +23,11 @@ export const findOrders: Middleware<unknown, RootState> = ({ dispatch }) => (
         ...rest,
         onSuccess: (data: any) => {
           dispatch({ type: FIND_ORDERS.SUCCESS, payload: data, key });
+        },
+        onAfterError: (err: any) => {
+          if (err && err.status && err.status === 500) {
+            dispatch({ type: RESET_APP_STATE });
+          }
         },
       })
     );

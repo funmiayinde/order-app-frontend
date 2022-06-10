@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import {  login, signUp } from '../../redux/actions';
+import {  login, logout, signUp } from '../../redux/actions';
 import { ActionOption } from '../../redux/actions/type';
 import { RootState } from '../../redux/type';
 import { AuthPropsType, UseAuthReturnType } from './types';
@@ -23,8 +23,8 @@ export const useAuth = (props: AuthPropsType): UseAuthReturnType => {
 
 
   const handleLogout = () => {
-    // dispatch(logout());
-  };
+    dispatch(logout());
+  }
 
   return {
     authData,

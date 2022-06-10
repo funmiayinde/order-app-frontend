@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentOrder, findOrders, getOrder } from '../../redux/actions';
+import { setCurrentOrder, findOrders, getOrder, updateOrder } from '../../redux/actions';
 import { ActionOption } from '../../redux/actions/type';
 import { RootState } from '../../redux/type';
 import { get as LodashGet } from 'lodash';
 import { useEffect } from 'react';
+import { createOrder } from '../../redux/actions/order/create-order';
 
 
 export type OrderProps = {
@@ -22,8 +23,24 @@ export type OrderType = {
     key: string,
     current: OrderNameSpace.Order | Record<string, any>
   ) => void;
+  readonly create: (
+    payload: Record<string, any>,
+    key: string,
+    options?: ActionOption
+  ) => void;
   readonly findAll: (key: string, options?: ActionOption) => void;
-  readonly findOne: (_id: string, key: string, options?: ActionOption) => void;
+  readonly findOne: (uid: string, key: string, options?: ActionOption) => void;
+  readonly update: (
+    uid: string,
+    key: string,
+    payload: Record<string, any>,
+    options?: ActionOption
+  ) => void;
+  // readonly deleteOne: (
+  //   uid: string,
+  //   key: string,
+  //   options?: ActionOption
+  // ) => void;
   readonly metadata: (
     key: string
   ) => {
@@ -57,6 +74,14 @@ export const useOrder = (props?: OrderProps): OrderType => {
     })
   );
 
+  const create = (
+    payload: Record<string, any>,
+    key: string,
+    options?: ActionOption
+  ) => {
+    dispatch(createOrder(payload, { ...defaultOptions, ...options, key }));
+  };
+
   const findAll = (key: string, options?: ActionOption) => {
     dispatch(findOrders({ ...defaultOptions, ...options, key }));
   };
@@ -64,6 +89,19 @@ export const useOrder = (props?: OrderProps): OrderType => {
   const findOne = (id: string, key: string, options?: ActionOption) => {
     dispatch(getOrder(id, { ...defaultOptions, ...options, key }));
   };
+
+  const update = (
+    uid: string,
+    key: string,
+    payload: Record<string, any>,
+    options?: ActionOption
+  ) => {
+    dispatch(updateOrder(uid, payload, { ...defaultOptions, ...options, key }));
+  };
+  
+  // const deleteOne = (uid: string, key: string, options?: ActionOption) => {
+  //   dispatch(deleteOrder(id, { ...defaultOptions, ...options, key }));
+  // };
 
   const metadata = (key: string) => ({
     loading: LodashGet(uiLoaders, key, false),
@@ -108,6 +146,8 @@ export const useOrder = (props?: OrderProps): OrderType => {
     byList,
     current,
     byId,
+    create,
+    update,
     findAll,
     findOne,
     metadata,

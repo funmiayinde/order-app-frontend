@@ -8,7 +8,7 @@ namespace OrderNameSpace {
       zip: string;
       country: string;
     };
-    actual_amount: number;
+    uid: string;
     customer: UserNameSpace.User;
   }
 }
