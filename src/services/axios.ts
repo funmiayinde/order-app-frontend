@@ -5,7 +5,7 @@ import auth from './auth';
 console.log('API-HOST:::', process.env.NEXT_PUBLIC_API_HOST);
 
 const defaultOptions = {
-    baseURL: process.env.NEXT_PUBLIC_API_HOST,
+    baseURL: process.env.NEXT_PUBLIC_API_HOST || 'https://order-backend-api.herokuapp.com/api/v1',
 };
 
 // update instance
