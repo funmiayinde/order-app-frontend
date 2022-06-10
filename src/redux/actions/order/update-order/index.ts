@@ -4,13 +4,13 @@ import { ActionOption } from '../../type';
 export const UPDATE_ORDER = createActionType('UPDATE_ORDER', 'ORDER');
 
 export const updateOrder = (
-  _id: string,
+  uid: string,
   payload: Record<string, any>,
   options?: ActionOption
 ) => ({
   type: UPDATE_ORDER.START,
   meta: {
-    _id,
+    uid,
     ...options,
     payload,
   },

@@ -13,7 +13,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import EditIcon from '@mui/icons-material/Edit';
 import { PropertyList } from '../_shared/widgets/property-list';
 import { PropertyListItem } from '../_shared/widgets/property-list-item';
-import { get } from 'lodash';
+import { get, values } from 'lodash';
 import moment from 'moment';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -139,9 +139,18 @@ const OrderForm = ({
   const { create, update } = useOrder({});
   const { findAll } = useOrder({});
   const { uiLoaders } = useUI();
+  const [bookingDate, setBookingDate] = useState('');
 
   const handleDelete = (e: any) => {
     e.preventDefault();
+  };
+
+  const doFindAll = (params = {}) => {
+    findAll('@@ORDER_KEY', {
+        params: {
+            ...params
+        }
+    });
   };
 
   const onFinish = (value: Record<string, any>) => {
@@ -171,34 +180,39 @@ const OrderForm = ({
         phone,
       },
     };
-    // if (onSave) {
-    //   onSave(payload);
-    // } else {
-    if (order) {
-      update(
-        order.uid,
-        'update',
-        {
-          ...order,
-          ...payload,
-        },
-        {
+    console.log('payload:', payload);
+    if (onSave) {
+      onSave(payload);
+    } else {
+      if (order) {
+        update(
+          order.uid,
+          'update',
+          {
+            ...order,
+            ...payload,
+          },
+          {
+            onFinish: (data?: Record<string, any>) => {
+              doFindAll();
+              onCancel();
+            },
+          }
+        );
+      } else {
+        create({ ...payload }, 'create', {
           onFinish: (data?: Record<string, any>) => {
-            console.log('onFinish-update::', data);
-            findAll('@@ORDER_KEY');
+            doFindAll();
             onCancel();
           },
-        }
-      );
-    } else {
-      create({ ...payload }, 'create', {
-        onFinish: (data?: Record<string, any>) => {
-          console.log('onFinish-update::', data);
-          onCancel();
-        },
-      });
+        });
+      }
     }
-    // }
+  };
+
+  const handleOnChangeDate = (value: any) => {
+    setBookingDate(moment(value).format('MM DD YYYY'));
+    formik.setFieldValue('bookingDate', value);
   };
 
   const formik = useFormik({
@@ -215,18 +229,14 @@ const OrderForm = ({
       submit: null,
     },
     validationSchema: Yup.object({
-      title: Yup.string().min(8).max(255).required('Password is required'),
-      city: Yup.string().min(8).max(255).required('City is required'),
-      country: Yup.string().min(8).max(255).required('Country is required'),
-      street: Yup.string().min(8).max(255).required('Street is required'),
-      zip: Yup.string().min(8).max(255).required('Zip is required'),
-      bookingDate: Yup.string()
-        .min(8)
-        .max(255)
-        .required('Booking Date is required'),
-      name: Yup.string().min(8).max(255).required('Customer name is required'),
+      title: Yup.string().max(255).required('Title is required'),
+      city: Yup.string().max(255).required('City is required'),
+      country: Yup.string().max(255).required('Country is required'),
+      street: Yup.string().max(255).required('Street is required'),
+      zip: Yup.string().max(255).required('Zip is required'),
+      bookingDate: Yup.string().max(255).required('Booking Date is required'),
+      name: Yup.string().max(255).required('Customer name is required'),
       phone: Yup.string()
-        .min(8)
         .max(255)
         .required('Customer phone number is required'),
       email: Yup.string()
@@ -303,42 +313,15 @@ const OrderForm = ({
           helperText={formik.touched.title && formik.errors.title}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={get(order, 'title', formik.values.title)}
+          value={order ? order?.title : formik.values.title}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             inputFormat="dd/MM/yyyy"
             label="Booking Date"
-            onChange={formik.handleChange}
-            renderInput={inputProps => (
-              <TextField
-                fullWidth
-                label="Title"
-                name="title"
-                margin="normal"
-                error={Boolean(
-                  formik.touched.bookingDate && formik.errors.bookingDate
-                )}
-                helperText={
-                  formik.touched.bookingDate && formik.errors.bookingDate
-                }
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={get(
-                  order,
-                  moment(order?.bookingDate).format('MMM'),
-                  formik.values.bookingDate
-                )}
-                {...inputProps}
-              />
-            )}
-            value={get(
-              order,
-              moment(order?.bookingDate).format('MMM'),
-              moment(order?.bookingDate).isValid()
-                ? moment(order?.bookingDate).format('MMM')
-                : 'Not Valid date'
-            )}
+            onChange={handleOnChangeDate}
+            renderInput={inputProps => <TextField fullWidth {...inputProps} />}
+            value={get(order, moment().format('MM DD YYYY'), bookingDate)}
           />
         </LocalizationProvider>
         <TextField
@@ -485,11 +468,12 @@ type OrderDrawerProps = {
   containerRef?: any;
   onClose?: (e?: any) => void;
   open?: boolean;
+  add?: boolean;
   order?: OrderNameSpace.Order | null;
 };
 
 export const OrderDrawer = (props: OrderDrawerProps) => {
-  const { containerRef, onClose, order, open } = props;
+  const { containerRef, add = false, onClose, order, open } = props;
   const [isEditing, setIsEditing] = useState(false);
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
 
@@ -527,6 +511,10 @@ export const OrderDrawer = (props: OrderDrawerProps) => {
           py: 4,
         }}
       >
+        {add && !order && (
+          <OrderPreview onEdit={handleEdit} order={order} lgUp={lgUp} />
+        )}
+        ;
         {!isEditing ? (
           <OrderPreview onEdit={handleEdit} order={order} lgUp={lgUp} />
         ) : (

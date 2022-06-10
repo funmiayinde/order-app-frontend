@@ -1,7 +1,12 @@
-import { GET_ORDER, UPDATE_ORDER, FIND_ORDERS, SET_CURRENT_ORDER} from '../../actions/order';
+import {
+  GET_ORDER,
+  UPDATE_ORDER,
+  FIND_ORDERS,
+  CREATE_ORDER,
+  SET_CURRENT_ORDER,
+} from '../../actions/order';
 import { arrayToById } from '../../../_shared/ui/redux';
 import { Action, OrderState } from '../types';
-
 
 export const initialOrderState: OrderState = {
   byId: {},
@@ -30,6 +35,7 @@ const orderReducer = (state = initialOrderState, action: Action) => {
       });
     }
     case GET_ORDER.SUCCESS:
+    case CREATE_ORDER.SUCCESS:
     case UPDATE_ORDER.SUCCESS: {
       const byIdCreate = {
         ...state.byId[key],

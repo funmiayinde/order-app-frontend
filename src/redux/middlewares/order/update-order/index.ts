@@ -13,7 +13,7 @@ export const updateOrder: Middleware<unknown, RootState> = ({ dispatch }) => (
     dispatch(
       httpRequest({
         method: PUT,
-        url: `${API.USERS}/${uid}`,
+        url: `${API.ORDERS}/${uid}`,
         key: key || 'updateOrder',
         ...rest,
         onSuccess: (data: any) => {

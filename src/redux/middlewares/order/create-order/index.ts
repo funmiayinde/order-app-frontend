@@ -1,6 +1,6 @@
 import { Middleware } from 'redux';
 import { API } from '../../../../_shared/util/_urls';
-import { httpRequest, POST } from '../../../actions';
+import { CREATE_ORDER, httpRequest, POST } from '../../../actions';
 import { CREATE_USER } from '../../../actions/user/create-user';
 import { Action, RootState } from '../../../type';
 
@@ -9,7 +9,7 @@ export const createOrder: Middleware<unknown, RootState> = ({ dispatch }) => (
 ) => (action: Action) => {
   next(action);
   const { type } = action;
-  if (type === CREATE_USER.START) {
+  if (type === CREATE_ORDER.START) {
     const { key, ...rest } = action.meta;
     dispatch(
       httpRequest({
@@ -18,7 +18,7 @@ export const createOrder: Middleware<unknown, RootState> = ({ dispatch }) => (
         key: key || 'createOrder',
         ...rest,
         onSuccess: (data: any) => {
-          dispatch({ type: CREATE_USER.SUCCESS, payload: data, key });
+          dispatch({ type: CREATE_ORDER.SUCCESS, payload: data, key });
         },
       })
     );

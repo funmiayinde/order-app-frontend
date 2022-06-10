@@ -62,6 +62,7 @@ const Orders = () => {
   const [drawer, setDrawer] = useState({
     isOpen: false,
     order: null,
+    add: false,
   });
 
   const ORDER_KEY = '@@ORDER_KEY';
@@ -115,6 +116,15 @@ const Orders = () => {
     setDrawer({
       isOpen: true,
       order,
+      add: false,
+    });
+  };
+  
+  const handleAddOrderDrawer = (order: any) => {
+    setDrawer({
+      isOpen: true,
+      order: null,
+      add: true,
     });
   };
 
@@ -140,7 +150,7 @@ const Orders = () => {
                 <Typography variant="h4">Orders</Typography>
               </Grid>
               <Grid item>
-                <Button variant="contained" onClick={handleOpenDrawer}>
+                <Button variant="contained" onClick={handleAddOrderDrawer}>
                   Add
                 </Button>
               </Grid>
@@ -232,6 +242,7 @@ const Orders = () => {
           containerRef={ref}
           onClose={handleOpenDrawer}
           open={drawer.isOpen}
+          add={drawer.add}
           order={drawer.order}
         />
       </Box>
