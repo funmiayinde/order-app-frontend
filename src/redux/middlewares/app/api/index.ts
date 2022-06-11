@@ -55,9 +55,7 @@ const processFirebaseResponse = (
   batch(() => {
     const { user } = response;
     if (response && response.user) {
-      console.log('token:::', user.getIdToken());
       user.getIdToken().then((value) => {
-        console.log('user-token:::', value);
         dispatch(setSessionToken(value));
       });
     }
@@ -70,7 +68,6 @@ const processFirebaseResponse = (
     }
     //call onfinish
     if (onFinish && typeof onFinish === 'function') {
-      console.log('onFinished-here:', onFinish);
       onFinish(user);
     }
 
@@ -87,7 +84,6 @@ const processFirebaseErrorResponse = (
   meta: any,
   error: any
 ) => {
-  console.log('firebase-err-1:', error);
   const { key, noErrorMessage, errorMessage, onError } = meta;
   const errMessage: Record<string, any> = {
     'auth/wrong-password': 'Please check the Password',
@@ -112,7 +108,6 @@ const processFirebaseErrorResponse = (
       const err = errMessage[error.code] || {
         message: 'Please check your internet connection.',
       };
-      console.log('firebase-err:', err);
       dispatch(updateUIError(key, err || err.message));
       showErrorMessage(errorMessage ?? err.message);
     }
@@ -126,7 +121,6 @@ export const firebaseRequest: Middleware<unknown, RootState> = ({
   if (action.type === FIREBASE_REQUEST.START) {
     const { meta } = action;
     const { key, payload } = meta; 
-    console.log('firebaseRequest-key:::', key);
     batch(() => {
       dispatch(updateUIError(key, null));
       dispatch(startUILoading(key));
@@ -174,7 +168,6 @@ export const httpRequest: Middleware<unknown, RootState> = ({
       useErrorSound = true,
       onAfterError,
     } = action.meta as Record<any, any> | ApiRequest;
-    console.log('meta-data:', { ...action.meta });
     const config = { method, url, data: undefined, params: undefined };
     if ((payload && !isEmpty(payload)) || payload instanceof FormData) {
       config.data = payload;
@@ -189,15 +182,12 @@ export const httpRequest: Middleware<unknown, RootState> = ({
     createAPIRequest(config)
       .then((response: any) => {
         const { data } = response;
-        console.log('response:', response);
-        console.log('data:', data);
         const meta = response?.meta || null;
         batch(() => {
           if (meta && meta.pagination) {
             dispatch(uiSetPagination(key, meta.pagination));
           }
           if (meta && meta.token) {
-            console.log('token:', meta.token);
             dispatch(setSessionToken(meta.token));
           }
           if (onSuccess) {
@@ -218,12 +208,10 @@ export const httpRequest: Middleware<unknown, RootState> = ({
             }
             //call onfinish
             if (onFinish && typeof onFinish === 'function') {
-              console.log('onFinished-here:', onFinish);
               onFinish(data);
             }
           } else {
             if (metadata) {
-              console.log('response:', response);
               dispatch({ type: onSuccess, payload: response });
             } else {
               dispatch({ type: onSuccess, payload: data });
@@ -245,7 +233,6 @@ export const httpRequest: Middleware<unknown, RootState> = ({
         });
       })
       .catch((error: any) => {
-        console.log('api-error:', error?.data);
         batch(() => {
           const showErrorMessage = (errMsg: string) => {
             if (!noErrorMessage && method.toLowerCase() !== GET && errMsg) {
@@ -270,7 +257,6 @@ export const httpRequest: Middleware<unknown, RootState> = ({
               error?.data?.meta?.error) ||
               (error && error.error) ||
               error || { message: 'Please check your internet connection.' };
-            console.log('api-error-2:', err);
             dispatch(updateUIError(key, errorMessage || err.message));
             showErrorMessage(errorMessage ?? err.message);
           }

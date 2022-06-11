@@ -23,7 +23,6 @@ const SignUpForm = (props: SignUpFormProps) => {
     onSubmit(values, {
       key: 'signUp',
       onFinish: (data: Record<string, any> | undefined) => {
-        console.log('data-onFinish:::', data);
         router.push(`${APP.ORDER}`)
       },
     });

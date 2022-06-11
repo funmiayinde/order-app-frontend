@@ -180,7 +180,6 @@ const OrderForm = ({
         phone,
       },
     };
-    console.log('payload:', payload);
     if (onSave) {
       onSave(payload);
     } else {

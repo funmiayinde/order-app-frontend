@@ -26,7 +26,6 @@ const LoginForm = (props: LoginFormProps) => {
     onSubmit(values, {
       key: 'login',
       onFinish: (data: Record<string, any> | undefined) => {
-        console.log('data-onFinish:::', data);
         router.push(`${APP.ORDER}`)
       },
     });

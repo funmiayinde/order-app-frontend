@@ -11,12 +11,10 @@ class AuthService {
 
   isLoggedIn(): boolean {
     const token = this.getUserSession();
-    console.log('token:', token);
     if (token) {
       try {
         const decoded: any = jwtDecode<any>(token);
         const sessionTimeExp = decoded.exp;
-        console.log('session:', sessionTimeExp > new Date().getTime() / 1000);
         return sessionTimeExp > new Date().getTime() / 1000;
       } catch (e) {
         return false;
