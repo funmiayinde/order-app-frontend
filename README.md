@@ -51,4 +51,4 @@ If you need clarification on what is not clear, contact me via mail [funmi.synta
 ## Acknowledgments
 Inspiration, code snippets, etc.
 * [typescript-cheatsheets/react]([https://github.com/typescript-cheatsheets/react])
-* [MUI](https://mui.com/material-ui/))
+* [MUI](https://mui.com/material-ui/)
